@@ -1,0 +1,60 @@
+ 1. STATES:
+ 2.   IdleGround: 0, 1, 0
+ 3.   IdleFloor1: 0, 1, 0
+ 4.   IdleFloor2: 0, 1, 0
+ 5.   IdleFloor3: 0, 1, 0
+ 6.   MovingUp1: 1, 0, 0
+ 7.   MovingUp2: 1, 0, 0
+ 8.   MovingUp3: 1, 0, 0
+ 9.   MovingDown3: 1, 0, 0
+10.   MovingDown2: 1, 0, 0
+11.   MovingDown1: 1, 0, 0
+12.   Emergency: 0, 0, 1
+13. INPUTS:
+14.   call_ground, call_floor1, call_floor2, call_floor3, floor_sensor1, floor_sensor2, floor_sensor3, emergency_stop
+17. OUTPUTS:
+18.   moving, idle, alarm
+19. INITIAL_STATE:
+20.   IdleGround
+21. TRANSITIONS:
+22.   IdleGround:
+23.     call_floor1 -> MovingUp1
+24.     call_floor2 -> MovingUp2
+25.     call_floor3 -> MovingUp3
+26.     emergency_stop -> Emergency
+27.   IdleFloor1:
+28.     call_ground -> MovingDown1
+29.     call_floor2 -> MovingUp2
+30.     call_floor3 -> MovingUp3
+31.     emergency_stop -> Emergency
+32.   IdleFloor2:
+33.     call_ground -> MovingDown2
+34.     call_floor1 -> MovingDown2
+35.     call_floor3 -> MovingUp3
+36.     emergency_stop -> Emergency
+37.   IdleFloor3:
+38.     call_ground -> MovingDown3
+39.     call_floor1 -> MovingDown2
+40.     call_floor2 -> MovingDown2
+41.     emergency_stop -> Emergency
+42.   MovingUp1:
+43.     floor_sensor1 -> IdleFloor1
+44.     emergency_stop -> Emergency
+45.   MovingUp2:
+46.     floor_sensor2 -> IdleFloor2
+47.     emergency_stop -> Emergency
+48.   MovingUp3:
+49.     floor_sensor3 -> IdleFloor3
+50.     emergency_stop -> Emergency
+51.   MovingDown1:
+52.     floor_sensor1 -> IdleGround
+53.     emergency_stop -> Emergency
+54.   MovingDown2:
+55.     floor_sensor2 -> IdleFloor2
+56.     emergency_stop -> Emergency
+57.   MovingDown3:
+58.     floor_sensor3 -> IdleFloor3
+59.     emergency_stop -> Emergency
+60.   Emergency:
+61.     call_ground -> IdleGround
+62.     !emergency_stop -> Emergency
